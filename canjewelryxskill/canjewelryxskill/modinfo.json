@@ -1,0 +1,14 @@
+{
+    "$schema": "https://moddbcdn.vintagestory.at/schema/modinfo.latest.json",
+    "type": "Code",
+    "modid": "canjewelryxskill",
+    "name": "CAN Jewelry — XSkills Integration",
+    "authors": [ "KenigVovan" ],
+    "description": "Adds a Lapidary XSkills skill that buffs CAN Jewelry mechanics.",
+    "version": "0.1.4",
+    "dependencies": {
+        "game": "",
+        "canjewelry": "",
+        "xlibfork": ""
+    }
+}

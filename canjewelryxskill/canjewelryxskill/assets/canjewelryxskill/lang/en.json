@@ -1,0 +1,62 @@
+{
+    "gem-was-extracted": "Previously extracted — re-encrusting will not award experience.",
+
+    "skill-lapidary": "Lapidary",
+    "skill-jeweler":  "Jeweler",
+    "group-processing": "Processing",
+    "group-crafting":   "Crafting",
+
+    "ability-panner":         "Panner",
+    "abilitydesc-panner":     "+{0:0}% rough gem yield from panning.",
+
+    "ability-light-touch":     "Light Touch",
+    "abilitydesc-light-touch": "Reduces material needed per pan-fill by {0:0}.",
+
+    "ability-prospector":      "Prospector",
+    "abilitydesc-prospector":  "Unlocks additional pannable materials configured in canjewelryxskill.json.",
+
+    "ability-resourceful":     "Resourceful",
+    "abilitydesc-resourceful": "{0:0}% chance to recover a smaller rough gem from the offcuts (normal→flawed→chipped).",
+
+    "ability-workshop-speedup":     "Workshop Speedup",
+    "abilitydesc-workshop-speedup": "Grinding stages complete {0:0}% faster.",
+
+    "ability-polished":        "Polished",
+    "abilitydesc-polished":    "+{0:0}% effect from grinder steps.",
+
+    "ability-master-cut":      "Master Cut",
+    "abilitydesc-master-cut":  "+{0:0}% grinding multiplier for mastered cut types. Tier 1: round. Tier 2: +pear. Tier 3: +baguette.",
+
+    "ability-master-lapidary":     "Master Lapidary",
+    "abilitydesc-master-lapidary": "+{0:0}% experience for cut, grind, and panning.",
+
+    "ability-steady-hand":         "Steady Hand",
+    "abilitydesc-steady-hand":     "+{0:0}% buff value on encrusted gems.",
+
+    "ability-inscriber":           "Inscriber",
+    "abilitydesc-inscriber":       "Allows engraving personal text onto jewelry.",
+
+    "ability-wire-worker":         "Wire Worker",
+    "abilitydesc-wire-worker":     "Draw +1/+2/+3 extra wire hanks per tier.",
+
+    "ability-synergist":           "Synergist",
+    "abilitydesc-synergist":       "+{0:0}% to buffs when 2+ identical gems share a piece.",
+
+    "ability-gem-extractor":       "Gem Extractor",
+    "abilitydesc-gem-extractor":   "{0:0}% chance to keep the gem intact when extracting it from a socket.",
+
+    "ability-mount-saver":         "Mount Saver",
+    "abilitydesc-mount-saver":     "{0:0}% chance to keep the jewelry from breaking on a failed extraction.",
+
+    "ability-delicate-touch":      "Delicate Touch",
+    "abilitydesc-delicate-touch":  "{0:0}% chance to recover a smaller gem when extraction fails (instead of losing it entirely).",
+
+    "ability-ironclad-setting":    "Ironclad Setting",
+    "abilitydesc-ironclad-setting":"-{0:0}% chance for jewelry to break during extraction.",
+
+    "ability-extract-license":     "Extract License",
+    "abilitydesc-extract-license": "Allows extracting gems from sockets.",
+
+    "ability-master-jeweler":      "Master Jeweler",
+    "abilitydesc-master-jeweler":  "+{0:0}% experience for socketing and encrusting."
+}

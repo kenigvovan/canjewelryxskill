@@ -1,0 +1,62 @@
+{
+    "gem-was-extracted": "Ранее извлечён — повторная инкрустация не даст опыта.",
+
+    "skill-lapidary": "Огранщик",
+    "skill-jeweler":  "Ювелир",
+    "group-processing": "Обработка",
+    "group-crafting":   "Ремёсла",
+
+    "ability-panner":          "Старатель",
+    "abilitydesc-panner":      "+{0:0}% к добыче необработанных камней при промывке.",
+
+    "ability-light-touch":     "Лёгкая рука",
+    "abilitydesc-light-touch": "Уменьшает материал на одну загрузку лотка на {0:0}.",
+
+    "ability-prospector":      "Старатель",
+    "abilitydesc-prospector":  "Открывает дополнительные материалы для промывки (см. canjewelryxskill.json).",
+
+    "ability-resourceful":     "Бережливость",
+    "abilitydesc-resourceful": "{0:0}% шанс получить камень меньшего размера из обрезков огранки (обычный→с изъяном→сколотый).",
+
+    "ability-workshop-speedup":     "Скорость мастерской",
+    "abilitydesc-workshop-speedup": "Этапы шлифовки завершаются на {0:0}% быстрее.",
+
+    "ability-polished":        "Шлифовка",
+    "abilitydesc-polished":    "+{0:0}% к эффекту шагов шлифовки.",
+
+    "ability-master-cut":      "Мастер огранки",
+    "abilitydesc-master-cut":  "+{0:0}% к множителю шлифовки для освоенных типов огранки. Тир 1: круглая. Тир 2: +грушевидная. Тир 3: +багет.",
+
+    "ability-master-lapidary":     "Великий огранщик",
+    "abilitydesc-master-lapidary": "+{0:0}% опыта за огранку, шлифовку и промывку.",
+
+    "ability-steady-hand":         "Твёрдая рука",
+    "abilitydesc-steady-hand":     "+{0:0}% к величине баффа инкрустированных камней.",
+
+    "ability-inscriber":           "Гравёр",
+    "abilitydesc-inscriber":       "Позволяет наносить личные надписи на украшения.",
+
+    "ability-wire-worker":         "Мастер проволоки",
+    "abilitydesc-wire-worker":     "При вытяжке проволоки +1/+2/+3 дополнительных мотка (зависит от тира).",
+
+    "ability-synergist":           "Синергист",
+    "abilitydesc-synergist":       "+{0:0}% к баффам, когда в одном изделии 2+ одинаковых камня.",
+
+    "ability-gem-extractor":       "Экстрактор",
+    "abilitydesc-gem-extractor":   "{0:0}% шанс не повредить камень при извлечении из гнезда.",
+
+    "ability-mount-saver":         "Хранитель оправы",
+    "abilitydesc-mount-saver":     "{0:0}% шанс уберечь изделие от поломки при неудачном извлечении.",
+
+    "ability-delicate-touch":      "Деликатная работа",
+    "abilitydesc-delicate-touch":  "{0:0}% шанс получить камень меньшего размера при неудачном извлечении (вместо полной потери).",
+
+    "ability-ironclad-setting":    "Несокрушимая оправа",
+    "abilitydesc-ironclad-setting":"-{0:0}% к шансу сломать украшение при извлечении.",
+
+    "ability-extract-license":     "Извлечение камней",
+    "abilitydesc-extract-license": "Позволяет извлекать камни из гнёзд.",
+
+    "ability-master-jeweler":      "Великий ювелир",
+    "abilitydesc-master-jeweler":  "+{0:0}% опыта за установку сокетов и инкрустацию."
+}
