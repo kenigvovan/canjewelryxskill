@@ -5,10 +5,10 @@
     "name": "CAN Jewelry — XSkills Integration",
     "authors": [ "KenigVovan" ],
     "description": "Adds a Lapidary XSkills skill that buffs CAN Jewelry mechanics.",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "dependencies": {
-        "game": "",
-        "canjewelry": "",
-        "xlibfork": ""
+      "game": "",
+      "canjewelry": "",
+      "xlibxaldisclasses": ""
     }
 }
