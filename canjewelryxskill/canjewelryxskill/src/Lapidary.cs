@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Text;
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 using XLib.XLeveling;
 
 namespace canjewelryxskill
@@ -18,12 +17,18 @@ namespace canjewelryxskill
         public int MasterLapidaryId   { get; private set; }
 
         public Lapidary(ICoreAPI api, SkillConfig cfg)
+            // Lang keys, not resolved strings. The skill has to be registered in StartPre so it
+            // lands in XLeveling.AssetsLoaded's specialisation snapshot (XLeveling runs at
+            // ExecuteOrder 0.15, we run at 0.5) — and lang files aren't loaded that early.
+            // canjewelryxskillModSystem.LocalizeSkills resolves them once assets are in,
+            // mirroring how XSkills builds its own skills.
             : base("lapidary",
-                   Lang.GetUnformatted("canjewelryxskill:skill-lapidary"),
-                   Lang.GetUnformatted("canjewelryxskill:group-processing"),
+                   "canjewelryxskill:skill-lapidary",
+                   "canjewelryxskill:group-processing",
                    cfg.ExpBase, cfg.ExpMult, cfg.MaxLevel)
         {
             XLeveling.Instance(api)?.RegisterSkill(this);
+            api.Logger.Event("[canjewelryxskill] RegisterSkill(lapidary) side={0} id={1}", api.Side, Id);
 
             PannerId           = AddAbility(BuildAbility("panner",           cfg));
             LightTouchId       = AddAbility(BuildAbility("light_touch",      cfg));
@@ -47,8 +52,8 @@ namespace canjewelryxskill
             string langKey = code.Replace('_', '-');
             return new Ability(
                 code,
-                Lang.GetUnformatted("canjewelryxskill:ability-" + langKey),
-                Lang.GetUnformatted("canjewelryxskill:abilitydesc-" + langKey),
+                "canjewelryxskill:ability-" + langKey,
+                "canjewelryxskill:abilitydesc-" + langKey,
                 ab.MinLevel, ab.MaxTier, ab.Values, false);
         }
     }

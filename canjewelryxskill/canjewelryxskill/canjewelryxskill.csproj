@@ -53,11 +53,11 @@
       <Private>False</Private>
     </Reference>
     <Reference Include="xlib">
-      <HintPath>..\..\..\libs\1.22\xlib.dll</HintPath>
+      <HintPath>..\..\..\libs\1.22\xlib_aldi.dll</HintPath>
       <Private>False</Private>
     </Reference>
     <Reference Include="xskills">
-      <HintPath>..\..\..\libs\1.22\xskills.dll</HintPath>
+      <HintPath>..\..\..\libs\1.22\xskills_aldi.dll</HintPath>
       <Private>False</Private>
     </Reference>
   </ItemGroup>

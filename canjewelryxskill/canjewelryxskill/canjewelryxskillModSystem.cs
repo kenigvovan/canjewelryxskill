@@ -1,11 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using canjewelry.src;
 using HarmonyLib;
 using canjewelry.src.integration;
 using canjewelry.src.utils;
 using Vintagestory.API.Common;
+using Vintagestory.API.Config;
 using Vintagestory.API.Datastructures;
 using Vintagestory.API.MathTools;
 using XLib.XLeveling;
@@ -19,21 +21,19 @@ namespace canjewelryxskill
         private canjewelry.src.canjewelry? _core;
         private CanJewelryXskillConfig _config = new();
         private Harmony? _harmony;
+        private bool _xlibPresent;
 
         public override double ExecuteOrder() => 0.5;
 
-        public override void Start(ICoreAPI api)
+        // Skills must exist before XLeveling.AssetsLoaded runs: that is where XLeveling walks
+        // its registered skills once and feeds every SpecialisationID into the "specialisations"
+        // LimitationRequirement. XLeveling sits at ExecuteOrder 0.15 and we sit at 0.5, so
+        // creating the skills in our own AssetsLoaded missed that pass entirely — master_lapidary
+        // and master_jeweler then never counted against the 1+4 specialisation limit. StartPre is
+        // safe: XLeveling builds its SkillSetTemplate in its constructor. Lang isn't loaded yet
+        // here, hence the deferred localization in AssetsLoaded below.
+        public override void StartPre(ICoreAPI api)
         {
-            if (api.Side == EnumAppSide.Client)
-            {
-                _harmony = new Harmony("canjewelryxskill.patches");
-                _harmony.Patch(
-                    typeof(CollectibleObject).GetMethod("GetHeldItemInfo"),
-                    postfix: new HarmonyMethod(typeof(CANJewelryXskillPatches)
-                        .GetMethod(nameof(CANJewelryXskillPatches.Postfix_GetHeldItemInfo)))
-                );
-            }
-
             // Load (or create-with-defaults) the balance config. FillMissing keeps the file
             // forwards-compatible after we add new perks.
             try
@@ -47,6 +47,45 @@ namespace canjewelryxskill
             }
             CanJewelryXskillConfig.FillMissing(_config);
             api.StoreModConfig(_config, "canjewelryxskill.json");
+
+            // XLib ships under several mod ids depending on the fork (xlib, xlibfork,
+            // xlibxaldisclasses, ...). They all expose the same XLib.XLeveling API from an
+            // assembly named "xlib", so one build works with any of them — but we can't list
+            // them in modinfo dependencies (there is no "or"). Detect at runtime instead and
+            // keep every XLib-typed call behind this flag so the mod stays loadable without it.
+            _xlibPresent = DetectXLib(api);
+            if (!_xlibPresent)
+            {
+                Mod.Logger.Warning("No XLib variant found — Lapidary/Jeweler skills stay disabled.");
+                return;
+            }
+
+            try
+            {
+                CreateSkills(api);
+            }
+            catch (Exception ex)
+            {
+                // An XLib fork with a diverging API surface would throw here (Missing*Exception).
+                // The event handlers all bail on a null skill, so we degrade instead of taking
+                // the world down during startup.
+                Mod.Logger.Error("Incompatible XLib variant — skills disabled. {0}", ex);
+            }
+        }
+
+        public override void Start(ICoreAPI api)
+        {
+            if (api.Side == EnumAppSide.Client)
+            {
+                _harmony = new Harmony("canjewelryxskill.patches");
+                _harmony.Patch(
+                    typeof(CollectibleObject).GetMethod("GetHeldItemInfo"),
+                    postfix: new HarmonyMethod(typeof(CANJewelryXskillPatches)
+                        .GetMethod(nameof(CANJewelryXskillPatches.Postfix_GetHeldItemInfo)))
+                );
+            }
+
+            if (!_xlibPresent) return;
 
             _core = api.ModLoader.GetModSystem<canjewelry.src.canjewelry>();
             if (_core == null)
@@ -70,12 +109,68 @@ namespace canjewelryxskill
             _core.OnCanInscribe += OnCanInscribe;
         }
 
-        // Lang files are only guaranteed to be loaded after AssetsLoaded. Creating Skill objects
-        // in Start() causes Lang.GetUnformatted() to return raw keys on the server.
+        // The skills carry lang keys until here — lang files are only guaranteed to be loaded by
+        // AssetsLoaded, and the skills themselves have to be built much earlier (see StartPre).
+        // Our ExecuteOrder 0.5 puts this after XSkills (0.25) does the same pass on its skills,
+        // so group names resolve to identical strings and both land in the same GUI tab.
         public override void AssetsLoaded(ICoreAPI api)
         {
-            _lapidary = new Lapidary(api, _config.Lapidary);
-            _jeweler  = new Jeweler(api,  _config.Jeweler);
+            if (!_xlibPresent) return;
+            try
+            {
+                LocalizeSkills();
+            }
+            catch (Exception ex)
+            {
+                Mod.Logger.Error("Failed to localize skill names — raw lang keys will show. {0}", ex);
+            }
+        }
+
+        // Kept out of StartPre and un-inlined: Lapidary/Jeweler derive from XLib's Skill, so
+        // JIT-ing a method that constructs them would try to resolve xlib.dll. Without this the
+        // _xlibPresent guard above would come too late and we'd throw instead of degrading.
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void CreateSkills(ICoreAPI api)
+        {
+            try
+            {
+                _lapidary = new Lapidary(api, _config.Lapidary);
+                _jeweler  = new Jeweler(api,  _config.Jeweler);
+            }
+            catch
+            {
+                _lapidary = null;
+                _jeweler  = null;
+                throw;
+            }
+        }
+
+        // Same reasoning as CreateSkills: touching Skill/Ability types needs xlib resolved.
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private void LocalizeSkills()
+        {
+            foreach (Skill? skill in new Skill?[] { _lapidary, _jeweler })
+            {
+                if (skill == null) continue;
+                skill.DisplayName = Lang.GetUnformatted(skill.DisplayName);
+                skill.Group       = Lang.GetUnformatted(skill.Group);
+                foreach (Ability ability in skill.Abilities)
+                {
+                    ability.DisplayName = Lang.GetUnformatted(ability.DisplayName);
+                    ability.Description = Lang.GetUnformatted(ability.Description);
+                }
+            }
+        }
+
+        private static bool DetectXLib(ICoreAPI api)
+        {
+            foreach (var mod in api.ModLoader.Mods)
+            {
+                string? id = mod.Info?.ModID;
+                if (id != null && id.StartsWith("xlib", StringComparison.OrdinalIgnoreCase))
+                    return true;
+            }
+            return false;
         }
 
         // Items/blocks aren't in the registry yet during Start(); resolving drop codes there
