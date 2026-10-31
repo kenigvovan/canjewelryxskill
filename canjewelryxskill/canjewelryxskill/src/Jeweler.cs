@@ -1,5 +1,4 @@
 using Vintagestory.API.Common;
-using Vintagestory.API.Config;
 using XLib.XLeveling;
 
 namespace canjewelryxskill
@@ -18,12 +17,14 @@ namespace canjewelryxskill
         public int MasterJewelerId    { get; private set; }
 
         public Jeweler(ICoreAPI api, SkillConfig cfg)
+            // Lang keys, not resolved strings — see the note in Lapidary's constructor.
             : base("jeweler",
-                   Lang.GetUnformatted("canjewelryxskill:skill-jeweler"),
-                   Lang.GetUnformatted("canjewelryxskill:group-crafting"),
+                   "canjewelryxskill:skill-jeweler",
+                   "canjewelryxskill:group-crafting",
                    cfg.ExpBase, cfg.ExpMult, cfg.MaxLevel)
         {
             XLeveling.Instance(api)?.RegisterSkill(this);
+            api.Logger.Event("[canjewelryxskill] RegisterSkill(jeweler) side={0} id={1}", api.Side, Id);
 
             SteadyHandId     = AddAbility(BuildAbility("steady_hand",     cfg));
             InscriberId      = AddAbility(BuildAbility("inscriber",       cfg));
@@ -55,8 +56,8 @@ namespace canjewelryxskill
             string langKey = code.Replace('_', '-');
             return new Ability(
                 code,
-                Lang.GetUnformatted("canjewelryxskill:ability-" + langKey),
-                Lang.GetUnformatted("canjewelryxskill:abilitydesc-" + langKey),
+                "canjewelryxskill:ability-" + langKey,
+                "canjewelryxskill:abilitydesc-" + langKey,
                 ab.MinLevel, ab.MaxTier, ab.Values, false);
         }
     }
